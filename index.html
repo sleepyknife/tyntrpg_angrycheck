@@ -380,8 +380,9 @@
 		img.style.height = "auto";
 		return;
 	}
-	else
+	else if(ten == 1 & unit == 9)
 	{
+		console.log(`${ten} ${unit}`);
 		img.src = "good.jpg";
 		img.alt = "成功";
 		img.style.display = "block";
@@ -389,6 +390,22 @@
 		// 🔽 加入放大 style（inline 設定）
 		img.style.width = "500px";
 		img.style.height = "auto";
+		return;
+	}
+	else
+	{
+		// 🔀 隨機選一張錯誤圖片
+		const errorImages = ["Wrong.jpg", "Wrong2.png"];
+		const selectedImage = errorImages[Math.floor(Math.random() * errorImages.length)];
+
+		img.src = selectedImage;
+		img.alt = "成功";
+		img.style.display = "block";
+		
+		// 🔽 加入放大 style（inline 設定）
+		img.style.width = "500px";
+		img.style.height = "auto";
+		return;
 	}
   }
 
