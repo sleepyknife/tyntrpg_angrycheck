@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>桃園TRPG推廣會活動查詢</title>
+  <style>
+    .column {
+      float: left;
+      margin-right: 30px;
+    }
+    .column h4 {
+      margin-bottom: 5px;
+    }
+    .radio-list {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin: 2px 0;
+      cursor: pointer;
+    }
+    .container {
+      display: flex;
+    }
+    #result {
+      clear: both;
+      margin-top: 30px;
+      font-weight: bold;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(6, 30px);
+      grid-template-rows: repeat(6, 30px);
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+    .cell input[type="radio"] {
+      width: 28px;
+      height: 28px;
+    }
+	
+	.main-layout {
+		display: flex;
+		align-items: flex-start;
+	  }
+
+	  .left-panel {
+		flex-grow: 1;
+	  }
+
+	  .right-panel {
+		width: 100%;
+		padding-left: 30px;
+	  }
+
+	  #feedbackImage {
+		max-width: 100%;
+		display: none;
+	  }
+  </style>
+</head>
+<body>
+
+<h2>桃園TRPG推廣會活動查詢</h2>
+
+<div class="main-layout">
+	<h2>月份</h2>
+
+	<div class="container">
+
+	  <!-- 第一欄：Prefix -->
+		<div class="column">
+		  <div class="radio-list">
+			<label><input type="radio" name="prefix" value="ja"> ja</label>
+			<label><input type="radio" name="prefix" value="j"> j</label>
+			<label><input type="radio" name="prefix" value="fe"> fe</label>
+			<label><input type="radio" name="prefix" value="ma"> ma</label>
+			<label><input type="radio" name="prefix" value="ap"> ap</label>
+			<label><input type="radio" name="prefix" value="ju"> ju</label>
+			<label><input type="radio" name="prefix" value="au"> au</label>
+			<label><input type="radio" name="prefix" value="se"> se</label>
+			<label><input type="radio" name="prefix" value="oc"> oc</label>
+			<label><input type="radio" name="prefix" value="no"> no</label>
+			<label><input type="radio" name="prefix" value="de"> de</label>
+		  </div>
+		</div>
+
+		<!-- 第二欄：Middle -->
+		<div class="column">
+		  <div class="radio-list">
+			<label><input type="radio" name="middle" value="n"> n</label>
+			<label><input type="radio" name="middle" value="br"> br</label>
+			<label><input type="radio" name="middle" value="r"> r</label>
+			<label><input type="radio" name="middle" value="pr"> pr</label>
+			<label><input type="radio" name="middle" value="y"> y</label>
+			<label><input type="radio" name="middle" value="ne"> ne</label>
+			<label><input type="radio" name="middle" value="ly"> ly</label>
+			<label><input type="radio" name="middle" value="gust"> gust</label>
+			<label><input type="radio" name="middle" value="pt"> pt</label>
+			<label><input type="radio" name="middle" value="to"> to</label>
+			<label><input type="radio" name="middle" value="vem"> vem</label>
+			<label><input type="radio" name="middle" value="cem"> cem</label>
+			<label><input type="radio" name="middle" value="u"> u</label>
+		  </div>
+		</div>
+
+		<!-- 第三欄：Suffix -->
+		<div class="column">
+		  <div class="radio-list">
+			<label><input type="radio" name="suffix" value="uary"> uary</label>
+			<label><input type="radio" name="suffix" value="ch"> ch</label>
+			<label><input type="radio" name="suffix" value="il"> il</label>
+			<label><input type="radio" name="suffix" value="ay"> ay</label>
+			<label><input type="radio" name="suffix" value="e"> e</label>
+			<label><input type="radio" name="suffix" value="y"> y</label>
+			<label><input type="radio" name="suffix" value="ust"> ust</label>
+			<label><input type="radio" name="suffix" value="ber"> ber</label>
+			<label><input type="radio" name="suffix" value="ly"> ly</label>
+			<label><input type="radio" name="suffix" value="Iy"> Iy</label>
+		  </div>
+		</div>
+
+	</div>
+
+	<h2>日期</h2>
+	<div class="grid" id="drawArea">
+	  <script>
+		for (let i = 0; i < 36; i++) {
+		  document.write(`
+			<div class="cell">
+			  <input type="radio" name="cell_${i}" id="c${i}">
+			</div>
+		  `);
+		}
+	  </script>
+	</div>
+	
+	<button onclick="CheckEvent()" style="margin-left: 30px;font-size: 20px; padding: 12px 24px; border-radius: 8px;">
+	  送出
+	</button>
+
+</div>
+ <!-- 右側：結果圖片 -->
+  <div class="right-panel">
+    <img id="feedbackImage" src="" alt="結果圖片">
+  </div>
+
+<script>
+  const digits = {
+    "0": [
+      "111",
+      "101",
+      "101",
+      "101",
+      "101",
+      "111"
+    ],
+    "1": [
+      "010",
+      "110",
+      "010",
+      "010",
+      "010",
+      "111"
+    ],
+    "2": [
+      "111",
+      "001",
+      "111",
+      "100",
+      "100",
+      "111"
+    ],
+    "3": [
+      "111",
+      "001",
+      "111",
+      "001",
+      "001",
+      "111"
+    ],
+    "4": [
+      "101",
+      "101",
+      "111",
+      "001",
+      "001",
+      "001"
+    ],
+    "5": [
+      "111",
+      "100",
+      "111",
+      "001",
+      "001",
+      "111"
+    ],
+    "6": [
+      "111",
+      "100",
+      "111",
+      "101",
+      "101",
+      "111"
+    ],
+    "7": [
+      "111",
+      "001",
+      "010",
+      "010",
+      "010",
+      "010"
+    ],
+    "8": [
+      "111",
+      "101",
+      "111",
+      "101",
+      "101",
+      "111"
+    ],
+    "9": [
+      "111",
+      "101",
+      "111",
+      "001",
+      "001",
+      "111"
+    ]
+  };
+
+  function getUserPattern() {
+    const left = [];
+    const right = [];
+
+    for (let row = 0; row < 6; row++) {
+      let leftRow = "";
+      let rightRow = "";
+
+      for (let col = 0; col < 6; col++) {
+        const index = row * 6 + col;
+        const isChecked = document.getElementById("c" + index).checked ? "1" : "0";
+
+        if (col < 3) leftRow += isChecked;
+        if (col >= 3) rightRow += isChecked;
+      }
+
+      left.push(leftRow);
+      right.push(rightRow);
+    }
+
+    return { left, right };
+  }
+
+  function hammingDistance(p1, p2) {
+    let dist = 0;
+    for (let i = 0; i < p1.length; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (p1[i][j] !== p2[i][j]) dist++;
+      }
+    }
+    return dist;
+  }
+
+  function recognizeDigit(pattern) {
+    let min = Infinity;
+    let best = "?";
+    for (let d in digits) {
+      const dist = hammingDistance(pattern, digits[d]);
+      if (dist < min) {
+        min = dist;
+        best = d;
+      }
+    }
+    return best;
+  }
+
+  function analyze() {
+    const { left, right } = getUserPattern();
+    const ten = recognizeDigit(left);
+    const unit = recognizeDigit(right);
+    document.getElementById("result").innerText = `你畫的應該是：${ten}${unit} 號`;
+  }
+  
+  const validMonths = {
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12
+  };
+
+  function checkMonth() {
+    const prefix = document.querySelector('input[name="prefix"]:checked');
+    const middle = document.querySelector('input[name="middle"]:checked');
+    const suffix = document.querySelector('input[name="suffix"]:checked');
+    const result = document.getElementById("result");
+
+    if (!prefix || !middle || !suffix) {
+      result.innerText = "請三欄都選取一項。";
+      return;
+    }
+
+    const monthStr = (prefix.value + middle.value + suffix.value).toLowerCase();
+
+    if (monthStr in validMonths) {
+      result.innerText = `🎉 你選的是 ${monthStr}（${validMonths[monthStr]} 月）`;
+    } else {
+      result.innerText = `❌「${monthStr}」不是一個月份，請再試一次。`;
+    }
+  }
+  
+  function CheckEvent()
+  {
+	const { left, right } = getUserPattern();
+    const ten = recognizeDigit(left);
+    const unit = recognizeDigit(right);
+	
+	const prefix = document.querySelector('input[name="prefix"]:checked');
+    const middle = document.querySelector('input[name="middle"]:checked');
+    const suffix = document.querySelector('input[name="suffix"]:checked');
+    const result = document.getElementById("result");
+	const img = document.getElementById("feedbackImage");
+	
+	if (!prefix || !middle || !suffix) 
+	{
+		console.log("Null Month");
+		// 🔀 隨機選一張錯誤圖片
+		const errorImages = ["Month_Error.png", "Month_Error2.png"];
+		const selectedImage = errorImages[Math.floor(Math.random() * errorImages.length)];
+
+		img.src = selectedImage;
+		
+		img.alt = "成功";
+		img.style.display = "block";
+		
+		// 🔽 加入放大 style（inline 設定）
+		img.style.width = "500px";
+		img.style.height = "auto";
+		return;
+	}
+    const monthStr = (prefix.value + middle.value + suffix.value).toLowerCase();
+	
+
+	if(monthStr != "july")
+	{
+		console.log("bad month");
+		// 🔀 隨機選一張錯誤圖片
+		const errorImages = ["Month_Error.png", "Month_Error2.png"];
+		const selectedImage = errorImages[Math.floor(Math.random() * errorImages.length)];
+
+		img.src = selectedImage;
+		img.alt = "成功";
+		img.style.display = "block";
+		
+		// 🔽 加入放大 style（inline 設定）
+		img.style.width = "500px";
+		img.style.height = "auto";
+		return;
+	}
+	if(ten != 1 & unit != 9)
+	{
+		// 🔀 隨機選一張錯誤圖片
+		const errorImages = ["Wrong.jpg", "Wrong2.png"];
+		const selectedImage = errorImages[Math.floor(Math.random() * errorImages.length)];
+
+		img.src = selectedImage;
+		img.alt = "成功";
+		img.style.display = "block";
+		
+		// 🔽 加入放大 style（inline 設定）
+		img.style.width = "500px";
+		img.style.height = "auto";
+		return;
+	}
+	else
+	{
+		img.src = "good.jpg";
+		img.alt = "成功";
+		img.style.display = "block";
+		
+		// 🔽 加入放大 style（inline 設定）
+		img.style.width = "500px";
+		img.style.height = "auto";
+	}
+  }
+
+</script>
+
+</body>
+</html>
